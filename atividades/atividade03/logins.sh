@@ -1,6 +1,6 @@
 #!/bin/bash
 
-scp -i $PEM $USERNAME@programacaoscripts.joao.marcelo.nom.br:/home/compartilhado/auth.log.1 .
+#  scp -i $PEM $USERNAME@programacaoscripts.joao.marcelo.nom.br:/home/compartilhado/auth.log.1 .
 
 # echo 'Um comando grep que encontre todas as linhas com mensagens que não são do sshd.'
 grep -v 'sshd' auth.log.1
