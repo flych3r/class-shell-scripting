@@ -1,4 +1,5 @@
 #!/bin/bash
+# Correção: 1,0
 
 #  scp -i $PEM $USERNAME@programacaoscripts.joao.marcelo.nom.br:/home/compartilhado/auth.log.1 .
 
