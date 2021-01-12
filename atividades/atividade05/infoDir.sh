@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 if [ -d $1 ]; then
     SIZE=$(du $1 | cut -f1)

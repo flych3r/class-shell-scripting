@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 [ -d $1 ] && echo É um diretório. || echo É um arquivo.
 
