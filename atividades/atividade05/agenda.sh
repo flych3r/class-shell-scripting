@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# Correção: 1,0
 
 COMMAND=$1
 

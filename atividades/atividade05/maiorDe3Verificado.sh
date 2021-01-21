@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# Correção: 1,0
 
 [[ $1 != +([0-9]) ]] && echo Opa!!! $1 não é número. && exit
 [[ $2 != +([0-9]) ]] && echo Opa!!! $2 não é número. && exit
