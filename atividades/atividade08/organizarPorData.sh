@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# Correção: 1,0
 
 DIR1=$1
 DIR2=$2
