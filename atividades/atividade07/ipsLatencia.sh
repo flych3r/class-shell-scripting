@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# Correção: 0,5
 
 echo Relatório de Latência.
 for ip in $(cat $1)
