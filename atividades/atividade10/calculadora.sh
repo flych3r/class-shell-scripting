@@ -1,4 +1,5 @@
 #!/bin/bash
+# Correção: 0,5. Não fez as operações para reais.
 
 TECLA=
 VISOR=
