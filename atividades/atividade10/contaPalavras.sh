@@ -1,3 +1,4 @@
+#!/bin/bash
 read -p 'Informe o arquivo: ' FILE
 
 BOW=$(cat $FILE | tr [:punct:] ' ' | tr '[:space:]' '[\n*]' | grep -v "^\s*$" | sort | uniq -c | sort -r | sed 's/  //g' | sed 's/ /:/g')
