@@ -1,0 +1,20 @@
+#!/bin/bash
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip -y
+sudo pip3 install flask
+cat <<EOF >> app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'Nome: {}, Matrícula: {}'.format(
+        'Matheus Xavier Sampaio', '397710'
+    )
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
+EOF
+sudo python3 app.py
