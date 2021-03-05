@@ -1,5 +1,5 @@
 # !/bin/awk -f
-
+# OK
 BEGIN {
     total = 0
     success = 0
