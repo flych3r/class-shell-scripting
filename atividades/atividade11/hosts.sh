@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# OK
 
 adicionar () {
     echo $1,$2 >> hosts.db
