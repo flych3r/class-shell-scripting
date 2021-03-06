@@ -2,7 +2,7 @@
 
 KEY_PAIR=$1
 SG_NAME="${2:-web-sg}"
-PROFILE="${3:-shell}"
+PROFILE="${3:-default}"
 
 # create security group
 SG_EXISTS=$(aws ec2 describe-security-groups --profile $PROFILE  \
