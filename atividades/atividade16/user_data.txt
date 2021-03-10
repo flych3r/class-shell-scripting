@@ -1,0 +1,56 @@
+#!/bin/bash
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip -y
+
+cat << EOS > /home/ubuntu/system_usage.sh
+#!/bin/bash
+cat << EOF > /home/ubuntu/index.html~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+EOF
+DATA=\$(date +%H:%M:%S-%D)
+echo "\$DATA Servidor Ativo<br>" >> /home/ubuntu/index.html~
+uptime -p | awk '{\$1=""; print "Online por " \$0 "<br>"}' >> /home/ubuntu/index.html~
+uptime | awk '{print "Utilizaçao de CPU no ultimo minuto: " substr(\$9, 1, length(\$9)-1)"%" "<br>"}' >> /home/ubuntu/index.html~
+free -m | awk 'NR==2{printf "Memoria Ocupada: %s MB, Memoria Livre:  %s MB<br>", \$3,\$4+\$7 }' >> /home/ubuntu/index.html~
+cat /proc/net/dev | grep 'eth0' | awk '{printf "Bytes recebidos: %s, Bytes enviados: %s<br>", \$2, \$10}' >> /home/ubuntu/index.html~
+cat << EOF >> /home/ubuntu/index.html~
+
+</body>
+</html>
+EOF
+mv /home/ubuntu/index.html~ /home/ubuntu/index.html
+EOS
+
+crontab -l > cronjob
+echo "* * * * * bash /home/ubuntu/system_usage.sh" >> cronjob
+crontab cronjob
+rm cronjob
+
+cat << EOS > /home/ubuntu/web_server.service
+[Unit]
+Description=Web server
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/env sudo python3 -m http.server --directory /home/ubuntu/ 80
+
+[Install]
+WantedBy=multi-user.target
+EOS
+
+sudo mv /home/ubuntu/web_server.service /etc/systemd/system/web_server.service
+
+sudo systemctl start web_server.service
+sudo systemctl enable web_server.service
