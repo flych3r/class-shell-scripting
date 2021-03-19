@@ -35,6 +35,9 @@ echo "* * * * * bash /home/ubuntu/system_usage.sh" >> cronjob
 crontab cronjob
 rm cronjob
 
+# O SystemD e o CRON são funcionalidades diferentes, mas neste caso
+# usa o CRON já faz a atualização da página, então para que configurar o SystemD?
+
 cat << EOS > /home/ubuntu/web_server.service
 [Unit]
 Description=Web server
