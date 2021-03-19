@@ -39,6 +39,7 @@ INSTANCE=$(aws ec2 run-instances --profile $PROFILE \
 )
 
 # wait for instance creation
+# de onde você tirou que o estado ok existe?
 STATUS=
 while [ "$STATUS" != "ok" ]
 do

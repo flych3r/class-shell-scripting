@@ -1,4 +1,5 @@
 #!/bin/bash
+# Correção: 0,6
 
 KEY_PAIR=$1
 SG_NAME="${2:-$web-sg}"
