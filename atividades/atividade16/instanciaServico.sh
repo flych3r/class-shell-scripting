@@ -5,11 +5,11 @@ SG_NAME="${2:-$web-sg}"
 PROFILE="${3:-default}"
 
 # create security group
-SG_EXISTS=$(aws ec2 describe-security-groups --profile $PROFILE  \
+SG_ID=$(aws ec2 describe-security-groups --profile $PROFILE  \
     --filters Name=group-name,Values=$SG_NAME \
-    --query "SecurityGroups[*].GroupName" --output text
+    --query "SecurityGroups[*].GroupId" --output text
 )
-if [ -z $SG_EXISTS ]
+if [ -z $SG_ID ]
 then
     SG_ID=$(aws ec2 create-security-group --profile $PROFILE  \
         --group-name $SG_NAME --description "Ports 80 and 22" --query "GroupId" --output=text
