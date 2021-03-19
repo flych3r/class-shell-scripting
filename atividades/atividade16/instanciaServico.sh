@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KEY_PAIR=$1
-SG_NAME="${2:-web-sg}"
+SG_NAME="${2:-$web-sg}"
 PROFILE="${3:-default}"
 
 # create security group
@@ -34,7 +34,7 @@ fi
 # run instance
 INSTANCE=$(aws ec2 run-instances --profile $PROFILE \
     --image-id ami-042e8287309f5df03 --count 1 --instance-type t2.micro \
-    --key-name $KEY_PAIR --security-group-ids web-sg --user-data file://user_data.txt \
+    --key-name $KEY_PAIR --security-group-ids $SG_ID --user-data file://user_data.txt \
     --query "Instances[*].InstanceId" --output=text
 )
 
