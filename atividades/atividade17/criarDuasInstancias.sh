@@ -5,6 +5,7 @@ USER_NAME=$2
 PASSWORD=$3
 SG_NAME="${4:-web-mysql-sg}"
 PROFILE="${5:-default}"
+MY_IP=$(curl -s http://checkip.amazonaws.com)
 
 # # create security group
 SG_ID=$(aws ec2 describe-security-groups --profile $PROFILE  \
@@ -30,7 +31,7 @@ if ! [[ " ${PORTS[@]} " =~ " 80 " ]]; then
 fi
 
 if ! [[ " ${PORTS[@]} " =~ " 22 " ]]; then
-    aws ec2 authorize-security-group-ingress --profile $PROFILE --group-name $SG_NAME --protocol tcp --port 22 --cidr 0.0.0.0/0
+    aws ec2 authorize-security-group-ingress --profile $PROFILE --group-name $SG_NAME --protocol tcp --port 22 --cidr $MY_IP/32
 fi
 
 if ! [[ " ${PORTS[@]} " =~ " 3306 " ]]; then
@@ -80,12 +81,12 @@ INSTANCE_CLIENT=$(aws ec2 run-instances --profile $PROFILE \
 
 # wait for instance creation
 STATUS_CLIENT=
-while [ "$STATUS_CLIENT" != "ok" ]
+while [ "$STATUS_CLIENT" != "running" ]
 do
     echo "Criando servidor de Aplicação..."
     sleep 30
     STATUS_CLIENT=$(aws ec2 describe-instance-status --instance-id $INSTANCE_CLIENT --profile $PROFILE \
-        --query "InstanceStatuses[0].InstanceStatus.Status" --output=text
+        --query "InstanceStatuses[0].InstanceState.Name" --output=text
     )
 done
 

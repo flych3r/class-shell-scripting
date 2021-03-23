@@ -4,6 +4,7 @@
 KEY_PAIR=$1
 SG_NAME="${2:-$web-sg}"
 PROFILE="${3:-default}"
+MY_IP=$(curl -s http://checkip.amazonaws.com)
 
 # create security group
 SG_ID=$(aws ec2 describe-security-groups --profile $PROFILE  \
@@ -29,7 +30,7 @@ if ! [[ " ${PORTS[@]} " =~ " 80 " ]]; then
 fi
 
 if ! [[ " ${PORTS[@]} " =~ " 22 " ]]; then
-    aws ec2 authorize-security-group-ingress --profile $PROFILE --group-name $SG_NAME --protocol tcp --port 22 --cidr 0.0.0.0/0
+    aws ec2 authorize-security-group-ingress --profile $PROFILE --group-name $SG_NAME --protocol tcp --port 22 --cidr $MY_IP/32
 fi
 
 # run instance

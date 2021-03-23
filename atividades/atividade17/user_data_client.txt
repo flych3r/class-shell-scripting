@@ -2,7 +2,7 @@
 
 export usuario=alunoufc
 export senha=123scripts789
-export server_ip=172.31.22.209
+export server_ip=172.31.95.197
 
 sudo apt update
 sudo apt install mysql-client -y
@@ -15,6 +15,4 @@ user=$usuario
 password=$senha
 EOF
 
-echo $server_ip > output
-
-mysql -u $usuario scripts -h $server_ip -e "USE scripts; CREATE TABLE Teste ( atividade INT );"
+mysql --defaults-file=/home/ubuntu/.my.cnf -u $usuario scripts -h $server_ip -e "CREATE TABLE Teste ( atividade INT );"
