@@ -1,5 +1,5 @@
 #!/bin/bash
-# Correção: 0,6
+# Correção: 1,0. Use o nginx ou o apache nas próximas atividades.
 
 KEY_PAIR=$1
 SG_NAME="${2:-$web-sg}"
