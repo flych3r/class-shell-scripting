@@ -81,12 +81,12 @@ INSTANCE_CLIENT=$(aws ec2 run-instances --profile $PROFILE \
 
 # wait for instance creation
 STATUS_CLIENT=
-while [ "$STATUS_CLIENT" != "running" ]
+while [ "$STATUS_CLIENT" != "ok" ]
 do
     echo "Criando servidor de Aplicação..."
     sleep 30
     STATUS_CLIENT=$(aws ec2 describe-instance-status --instance-id $INSTANCE_CLIENT --profile $PROFILE \
-        --query "InstanceStatuses[0].InstanceState.Name" --output=text
+        --query "InstanceStatuses[0].InstanceStatus.Status" --output=text
     )
 done
 
