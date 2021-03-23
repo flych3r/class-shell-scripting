@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export usuario=alunoufc
-export senha=123scripts789
-export server_ip=172.31.95.197
+export usuario=
+export senha=
+export server_ip=
 
 sudo apt update
 sudo apt install mysql-client -y
