@@ -1,4 +1,5 @@
 #!/bin/bash
+# Nota: 1,0
 
 KEY_PAIR=$1
 USER_NAME=$2
