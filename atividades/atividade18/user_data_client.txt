@@ -1,0 +1,67 @@
+#!/bin/bash
+
+export usuario=alunoufc
+export senha=123scripts789
+export server_ip=172.31.81.90
+
+sudo apt update
+sudo apt install mysql-client apache2 php-mysql php-curl libapache2-mod-php php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip -y
+
+cd /home/ubuntu
+
+cat << EOF > .my.cnf
+[client]
+user=$usuario
+password=$senha
+EOF
+
+cat <<EOF > /etc/apache2/sites-available/wordpress.conf
+<Directory /var/www/html/wordpress/>
+    AllowOverride All
+</Directory>
+EOF
+sudo mv wordpress.cnf /etc/apache2/sites-available/wordpress.conf
+
+sudo a2enmod rewrite
+sudo a2ensite wordpress
+
+curl -O https://wordpress.org/latest.tar.gz
+tar xzvf latest.tar.gz
+touch wordpress/.htaccess
+sudo cp -a wordpress/. /var/www/html/wordpress
+sudo chown -R www-data:www-data /var/www/html/wordpress
+sudo find /var/www/html/wordpress/ -type d -exec chmod 750 {} \;
+sudo find /var/www/html/wordpress/ -type f -exec chmod 640 {} \;
+
+sudo systemctl reload apache2
+
+BD=scripts
+USER=$usuario
+PASSWORD=$senha
+HOST=$server_ip
+
+cat <<EOF > wp-config.php
+<?php
+define( 'DB_NAME', '$BD' );
+define( 'DB_USER', '$USER' );
+define( 'DB_PASSWORD', '$PASSWORD' );
+define( 'DB_HOST', '$HOST' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+define( 'WPLANG', 'pt_BR' );
+
+$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
+
+\$table_prefix = 'wp_';
+
+define( 'WP_DEBUG', false );
+
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+
+require_once ABSPATH . 'wp-settings.php';
+EOF
+
+sudo cp wp-config.php /var/www/html/wordpress/
+sudo systemctl restart apache2
