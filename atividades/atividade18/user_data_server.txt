@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export usuario=alunoufc
-export senha=123scripts789
+export usuario=
+export senha=
 
 sudo apt update
 sudo apt install mysql-server -y

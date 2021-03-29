@@ -1,21 +1,15 @@
 #!/bin/bash
 
-export usuario=alunoufc
-export senha=123scripts789
-export server_ip=172.31.81.90
+export usuario=
+export senha=
+export server_ip=
 
 sudo apt update
 sudo apt install mysql-client apache2 php-mysql php-curl libapache2-mod-php php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip -y
 
 cd /home/ubuntu
 
-cat << EOF > .my.cnf
-[client]
-user=$usuario
-password=$senha
-EOF
-
-cat <<EOF > /etc/apache2/sites-available/wordpress.conf
+cat << EOF > /etc/apache2/sites-available/wordpress.conf
 <Directory /var/www/html/wordpress/>
     AllowOverride All
 </Directory>
@@ -40,7 +34,7 @@ USER=$usuario
 PASSWORD=$senha
 HOST=$server_ip
 
-cat <<EOF > wp-config.php
+cat << EOF > wp-config.php
 <?php
 define( 'DB_NAME', '$BD' );
 define( 'DB_USER', '$USER' );
@@ -48,12 +42,12 @@ define( 'DB_PASSWORD', '$PASSWORD' );
 define( 'DB_HOST', '$HOST' );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
-define( 'WPLANG', 'pt_BR' );
 
 $(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
 
 \$table_prefix = 'wp_';
 
+define( 'WPLANG', 'pt_BR' );
 define( 'WP_DEBUG', false );
 
 if ( ! defined( 'ABSPATH' ) ) {
