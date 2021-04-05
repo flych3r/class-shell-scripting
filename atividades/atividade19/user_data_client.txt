@@ -1,0 +1,76 @@
+#!/bin/bash
+
+export usuario=
+export senha=
+export server_ip=
+
+apt update
+apt install mysql-client apache2 php-mysql php-curl libapache2-mod-php php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip -y
+
+cd /home/ubuntu
+
+cat << EOF > .my.cnf.admin
+[client]
+user=$usuario
+password=$senha
+EOF
+
+cat << EOF > .my.cnf.wordpress
+[client]
+user=wordpress
+password=$senha
+EOF
+
+mysql --defaults-file=/home/ubuntu/.my.cnf.admin -u $usuario -h $server_ip -e "CREATE DATABASE wordpress;"
+mysql --defaults-file=/home/ubuntu/.my.cnf.admin -u $usuario -h $server_ip -e "CREATE USER 'wordpress'@'%' IDENTIFIED BY '${senha}';"
+mysql --defaults-file=/home/ubuntu/.my.cnf.admin -u $usuario -h $server_ip -e "GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%';"
+
+cat << EOF > /etc/apache2/sites-available/wordpress.conf
+<Directory /var/www/html/wordpress/>
+    AllowOverride All
+</Directory>
+EOF
+
+a2enmod rewrite
+a2ensite wordpress
+
+curl -O https://wordpress.org/latest.tar.gz
+tar xzvf latest.tar.gz
+touch wordpress/.htaccess
+cp -a wordpress/. /var/www/html/wordpress
+chown -R www-data:www-data /var/www/html/wordpress
+find /var/www/html/wordpress/ -type d -exec chmod 750 {} \;
+find /var/www/html/wordpress/ -type f -exec chmod 640 {} \;
+
+systemctl reload apache2
+
+BD=wordpress
+USER=wordpress
+PASSWORD=$senha
+HOST=$server_ip
+
+cat << EOF > wp-config.php
+<?php
+define( 'DB_NAME', '$BD' );
+define( 'DB_USER', '$USER' );
+define( 'DB_PASSWORD', '$PASSWORD' );
+define( 'DB_HOST', '$HOST' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+
+$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
+
+\$table_prefix = 'wp_';
+
+define( 'WPLANG', 'pt_BR' );
+define( 'WP_DEBUG', false );
+
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+
+require_once ABSPATH . 'wp-settings.php';
+EOF
+
+cp wp-config.php /var/www/html/wordpress/
+systemctl restart apache2
