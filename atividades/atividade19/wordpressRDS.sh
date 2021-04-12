@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Correção: 2,5
 KEY_PAIR=$1
 USER_NAME=$2
 PASSWORD=$3
